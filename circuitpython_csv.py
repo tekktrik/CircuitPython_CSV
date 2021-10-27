@@ -66,17 +66,24 @@ class reader:
                 continue
 
             next_match = re.match(self._re_exp, pre_regex_string) # get text match, and add to list
-            for match in next_match.groups():
-                if match != None:
-                    csv_value_list.append(match)
-                    break
-
-            last_index = next_match.span()[1] # remove the match from the string
+            matches = next_match.groups()
+            if matches[0] == None:
+                latest_match = matches[1].strip('\r\n').strip('\n')
+                csv_value_list.append(latest_match)
+            else:
+                latest_match = matches[0].strip('\r\n').strip('\n')
+                csv_value_list.append(latest_match[1:-1])
 
             if len(pre_regex_string) != 0: # If anything is left in the list...
-                pre_regex_string = pre_regex_string[last_index:]
+                pre_regex_string = pre_regex_string[len(latest_match):] # Remove the element just grabbed
                 if pre_regex_string == self.delimiter: # if all that's left is a trailing delimiter, remove and append element to list
                     csv_value_list.append('')
                     pre_regex_string = pre_regex_string[1:]
+                elif pre_regex_string == '\r\n' or pre_regex_string == 'n': # if it's just a newline, remove it and leave as empty string
+                    pre_regex_string=''
+                pre_regex_string = pre_regex_string[1:] # remove the delimiter
+
+
+        return csv_value_list
 
         return csv_value_list
