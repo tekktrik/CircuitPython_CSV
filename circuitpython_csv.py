@@ -36,6 +36,12 @@ __repo__ = "https://github.com/tekktrik/Circuitpython_CircuitPython_CSV.git"
 
 import io
 import re
+import os
+
+try:
+    from typing import List
+except ImportError:
+    pass
 
 class reader:
     
