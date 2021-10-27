@@ -44,7 +44,7 @@ except ImportError:
     pass
 
 class reader:
-    
+
     def __init__(self, file_iterator: io.TextIOWrapper, delimiter: str = ',', quotechar: str = '"'):
 
         self.file_interator = file_iterator
@@ -60,7 +60,6 @@ class reader:
         pre_regex_string = self.file_interator.__next__()
 
         while len(pre_regex_string) != 0: # while length of string is not zero
-
             if pre_regex_string.startswith(self.delimiter): # if string starts with delimiter, add element and remove
                 csv_value_list.append('')
                 pre_regex_string = pre_regex_string[1:]
