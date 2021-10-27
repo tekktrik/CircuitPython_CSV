@@ -2,3 +2,19 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021 Alec Delaney
 #
 # SPDX-License-Identifier: Unlicense
+
+import board
+import sdcardio
+import storage
+import circuitpython_csv as csv
+
+# Initialize SD card
+spi = board.SPI()
+sdcard = sdcardio.SDCard(spi, board.D10)
+vfs = storage.VfsFat(sdcard)
+storage.mount(vfs, '/sd')
+
+with open('/sd/testwrite.csv', mode='w', encoding='utf-8') as writablefile:
+    csvwriter = csv.writer(writablefile)
+    csvwriter.writerow(['I', 'love', 'CircuitPython', '!'])
+    csvwriter.writerow(['Spam']*3)
