@@ -53,7 +53,7 @@ class reader:
         self._re_exp = '(\\' + quotechar + '.+?\\' + quotechar + ')|([^' + delimiter + ']+)'
 
     def __iter__(self):
-        return self.file_interator
+        return self
 
     def __next__(self):
         csv_value_list = []
