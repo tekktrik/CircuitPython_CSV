@@ -86,4 +86,21 @@ class reader:
 
         return csv_value_list
 
-        return csv_value_list
+class writer:
+
+    def __init__(self, file_iterator: io.TextIOWrapper, delimiter: str = ',', quoterchar: str = '"'):
+
+        self.file_iterator = file_iterator
+        self.delimiter = delimiter
+        self.quotechar = quoterchar
+        self.newlinechar = '\r\n'
+
+    def writerow(self, seq):
+
+        parsed_seq = [self._apply_quotes(entry) for entry in seq]
+        parsed_str = (self.delimiter).join(parsed_seq)
+        self.file_iterator.write(parsed_str + self.newlinechar)
+
+    def _apply_quotes(self, entry):
+
+        return (self.quotechar + entry + self.quotechar) if self.delimiter in entry else entry
