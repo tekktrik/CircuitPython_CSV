@@ -12,9 +12,9 @@ import circuitpython_csv as csv
 spi = board.SPI()
 sdcard = sdcardio.SDCard(spi, board.D10)
 vfs = storage.VfsFat(sdcard)
-storage.mount(vfs, '/sd')
+storage.mount(vfs, "/sd")
 
-with open('/sd/testwrite.csv', mode='w', encoding='utf-8') as writablefile:
+with open("/sd/testwrite.csv", mode="w", encoding="utf-8") as writablefile:
     csvwriter = csv.writer(writablefile)
-    csvwriter.writerow(['I', 'love', 'CircuitPython', '!'])
-    csvwriter.writerow(['Spam']*3)
+    csvwriter.writerow(["I", "love", "CircuitPython", "!"])
+    csvwriter.writerow(["Spam"] * 3)

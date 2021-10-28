@@ -36,14 +36,18 @@ try:
 except ImportError:
     pass
 
-class reader:
 
-    def __init__(self, csvfile: io.TextIOWrapper, delimiter: str = ',', quotechar: str = '"'):
+class reader:
+    def __init__(
+        self, csvfile: io.TextIOWrapper, delimiter: str = ",", quotechar: str = '"'
+    ):
 
         self.file_interator = csvfile
         self.delimiter = delimiter
         self.quotechar = quotechar
-        self._re_exp = '(\\' + quotechar + '.+?\\' + quotechar + ')|([^' + delimiter + ']+)'
+        self._re_exp = (
+            "(\\" + quotechar + ".+?\\" + quotechar + ")|([^" + delimiter + "]+)"
+        )
 
     def __iter__(self):
         return self
@@ -52,41 +56,52 @@ class reader:
         csv_value_list = []
         pre_regex_string = self.file_interator.__next__()
 
-        while len(pre_regex_string) != 0: # while length of string is not zero
-            if pre_regex_string.startswith(self.delimiter): # if string starts with delimiter, add element and remove
-                csv_value_list.append('')
+        while len(pre_regex_string) != 0:  # while length of string is not zero
+            if pre_regex_string.startswith(
+                self.delimiter
+            ):  # if string starts with delimiter, add element and remove
+                csv_value_list.append("")
                 pre_regex_string = pre_regex_string[1:]
                 continue
 
-            next_match = re.match(self._re_exp, pre_regex_string) # get text match, and add to list
+            next_match = re.match(
+                self._re_exp, pre_regex_string
+            )  # get text match, and add to list
             matches = next_match.groups()
             if matches[0] == None:
-                latest_match = matches[1].strip('\r\n').strip('\n')
+                latest_match = matches[1].strip("\r\n").strip("\n")
                 csv_value_list.append(latest_match)
             else:
-                latest_match = matches[0].strip('\r\n').strip('\n')
+                latest_match = matches[0].strip("\r\n").strip("\n")
                 csv_value_list.append(latest_match[1:-1])
 
-            if len(pre_regex_string) != 0: # If anything is left in the list...
-                pre_regex_string = pre_regex_string[len(latest_match):] # Remove the element just grabbed
-                if pre_regex_string == self.delimiter: # if all that's left is a trailing delimiter, remove and append element to list
-                    csv_value_list.append('')
+            if len(pre_regex_string) != 0:  # If anything is left in the list...
+                pre_regex_string = pre_regex_string[
+                    len(latest_match) :
+                ]  # Remove the element just grabbed
+                if (
+                    pre_regex_string == self.delimiter
+                ):  # if all that's left is a trailing delimiter, remove and append element to list
+                    csv_value_list.append("")
                     pre_regex_string = pre_regex_string[1:]
-                elif pre_regex_string == '\r\n' or pre_regex_string == 'n': # if it's just a newline, remove it and leave as empty string
-                    pre_regex_string=''
-                pre_regex_string = pre_regex_string[1:] # remove the delimiter
-
+                elif (
+                    pre_regex_string == "\r\n" or pre_regex_string == "n"
+                ):  # if it's just a newline, remove it and leave as empty string
+                    pre_regex_string = ""
+                pre_regex_string = pre_regex_string[1:]  # remove the delimiter
 
         return csv_value_list
 
-class writer:
 
-    def __init__(self, csvfile: io.TextIOWrapper, delimiter: str = ',', quoterchar: str = '"'):
+class writer:
+    def __init__(
+        self, csvfile: io.TextIOWrapper, delimiter: str = ",", quoterchar: str = '"'
+    ):
 
         self.file_iterator = csvfile
         self.delimiter = delimiter
         self.quotechar = quoterchar
-        self.newlinechar = '\r\n'
+        self.newlinechar = "\r\n"
 
     def writerow(self, seq):
 
@@ -100,12 +115,24 @@ class writer:
 
     def _apply_quotes(self, entry):
 
-        return (self.quotechar + entry + self.quotechar) if self.delimiter in entry else entry
+        return (
+            (self.quotechar + entry + self.quotechar)
+            if self.delimiter in entry
+            else entry
+        )
+
 
 # Mostly copied from CPython's csv.py:
 class DictReader:
-
-    def __init__(self, f: io.TextIOWrapper, fieldnames: Optional[List] = None, restkey: Optional[str] = None, restval: Optional[Any] = None, *args, **kwargs):
+    def __init__(
+        self,
+        f: io.TextIOWrapper,
+        fieldnames: Optional[List] = None,
+        restkey: Optional[str] = None,
+        restval: Optional[Any] = None,
+        *args,
+        **kwargs
+    ):
 
         self.fieldnames = fieldnames
         self.restkey = restkey
@@ -136,13 +163,21 @@ class DictReader:
 
 # Copied from CPython's csv.py
 class DictWriter:
-
-    def __init__(self, f: io.TextIOWrapper, fieldnames: List, restval: str = "", extrasaction: str = "raise", *args, **kwds):
-        self.fieldnames = fieldnames    # list of keys for the dict
-        self.restval = restval          # for writing short dicts
+    def __init__(
+        self,
+        f: io.TextIOWrapper,
+        fieldnames: List,
+        restval: str = "",
+        extrasaction: str = "raise",
+        *args,
+        **kwds
+    ):
+        self.fieldnames = fieldnames  # list of keys for the dict
+        self.restval = restval  # for writing short dicts
         if extrasaction.lower() not in ("raise", "ignore"):
-            raise ValueError("extrasaction ""(%s)"" must be 'raise' or 'ignore'"
-                             % extrasaction)
+            raise ValueError(
+                "extrasaction " "(%s)" " must be 'raise' or 'ignore'" % extrasaction
+            )
         self.extrasaction = extrasaction
         self.writer = writer(f, *args, **kwds)
 
@@ -154,8 +189,10 @@ class DictWriter:
         if self.extrasaction == "raise":
             wrong_fields = rowdict.keys() - self.fieldnames
             if wrong_fields:
-                raise ValueError("dict contains fields not in fieldnames: "
-                                 + ", ".join([repr(x) for x in wrong_fields]))
+                raise ValueError(
+                    "dict contains fields not in fieldnames: "
+                    + ", ".join([repr(x) for x in wrong_fields])
+                )
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
     def writerow(self, rowdict: Dict):
