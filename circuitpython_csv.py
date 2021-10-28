@@ -37,7 +37,7 @@ except ImportError:
     pass
 
 
-class reader:
+class reader:  # pylint: disable=invalid-name
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quotechar: str = '"'
     ):
@@ -68,7 +68,7 @@ class reader:
                 self._re_exp, pre_regex_string
             )  # get text match, and add to list
             matches = next_match.groups()
-            if matches[0] == None:
+            if matches[0] is None:
                 latest_match = matches[1].strip("\r\n").strip("\n")
                 csv_value_list.append(latest_match)
             else:
@@ -85,7 +85,8 @@ class reader:
                     csv_value_list.append("")
                     pre_regex_string = pre_regex_string[1:]
                 elif (
-                    pre_regex_string == "\r\n" or pre_regex_string == "n"
+                    pre_regex_string == "\r\n"  # pylint: disable=consider-using-in
+                    or pre_regex_string == "n"  # pylint: disable=consider-using-in
                 ):  # if it's just a newline, remove it and leave as empty string
                     pre_regex_string = ""
                 pre_regex_string = pre_regex_string[1:]  # remove the delimiter
@@ -93,7 +94,7 @@ class reader:
         return csv_value_list
 
 
-class writer:
+class writer:  # pylint: disable=invalid-name
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quoterchar: str = '"'
     ):
@@ -130,14 +131,13 @@ class DictReader:
         fieldnames: Optional[List] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
-        *args,
         **kwargs
     ):
 
         self.fieldnames = fieldnames
         self.restkey = restkey
         self.restval = restval
-        self.reader = reader(f, *args, **kwargs)
+        self.reader = reader(f, **kwargs)
         self.line_num = 0
 
     def __iter__(self):
@@ -145,20 +145,20 @@ class DictReader:
 
     def __next__(self):
         if self.line_num == 0:
-            if self.fieldnames == None:
+            if self.fieldnames is None:
                 self.fieldnames = next(self.reader)
         row = next(self.reader)
 
-        d = dict(zip(self.fieldnames, row))
-        lf = len(self.fieldnames)
-        lr = len(row)
-        if lf < lr:
-            d[self.restkey] = row[lf:]
-        elif lf > lr:
-            for key in self.fieldnames[lr:]:
-                d[key] = self.restval
+        row_dict = dict(zip(self.fieldnames, row))
+        length_fn = len(self.fieldnames)
+        length_row = len(row)
+        if length_fn < length_row:
+            row_dict[self.restkey] = row[length_fn:]
+        elif length_fn > length_row:
+            for key in self.fieldnames[length_row:]:
+                row_dict[key] = self.restval
         self.line_num += 1
-        return d
+        return row_dict
 
 
 # Copied from CPython's csv.py
@@ -169,7 +169,6 @@ class DictWriter:
         fieldnames: List,
         restval: str = "",
         extrasaction: str = "raise",
-        *args,
         **kwds
     ):
         self.fieldnames = fieldnames  # list of keys for the dict
@@ -179,7 +178,7 @@ class DictWriter:
                 "extrasaction " "(%s)" " must be 'raise' or 'ignore'" % extrasaction
             )
         self.extrasaction = extrasaction
-        self.writer = writer(f, *args, **kwds)
+        self.writer = writer(f, **kwds)
 
     def writeheader(self):
         header = dict(zip(self.fieldnames, self.fieldnames))
