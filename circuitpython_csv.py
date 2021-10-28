@@ -38,6 +38,14 @@ except ImportError:
 
 
 class reader:  # pylint: disable=invalid-name
+    """Basic CSV reader class
+
+    :param csvfile: The open file to read from
+    :param delimiter: The CSV delimiter, default is comma (,)
+    :param quotechar: The CSV quote character for encapsulating special characters \
+    including the delimiter, default is double quotation mark (")
+    """
+
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quotechar: str = '"'
     ):
@@ -95,6 +103,14 @@ class reader:  # pylint: disable=invalid-name
 
 
 class writer:  # pylint: disable=invalid-name
+    """Basic CSV writer class
+
+    :param csvfile: The open CSVfile to write to
+    :param delimiter: The CSV delimiter, default is comma (,)
+    :param quotechar: The CSV quote character for encapsulating special characters \
+    including the delimiter, default is double quotation mark (")
+    """
+
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quoterchar: str = '"'
     ):
@@ -104,17 +120,29 @@ class writer:  # pylint: disable=invalid-name
         self.quotechar = quoterchar
         self.newlinechar = "\r\n"
 
-    def writerow(self, seq):
+    def writerow(self, seq: List):
+        """Write a row to the CSV file
+
+        :param seq: The list of values to write
+        """
 
         parsed_seq = [self._apply_quotes(entry) for entry in seq]
         parsed_str = (self.delimiter).join(parsed_seq)
         self.file_iterator.write(parsed_str + self.newlinechar)
 
     def writerows(self, rows: iter):
+        """Write multiple rows to the CSV file
+
+        :param rows: An iterable item that yields multiple rows to write (e.g., list)
+        """
         for row in rows:
             self.writerow(row)
 
     def _apply_quotes(self, entry):
+        """Apply the quote character to entries as necessary
+
+        :param entry: The entry to add the quote charcter to, if needed
+        """
 
         return (
             (self.quotechar + entry + self.quotechar)
@@ -125,6 +153,18 @@ class writer:  # pylint: disable=invalid-name
 
 # Mostly copied from CPython's csv.py:
 class DictReader:
+    """CSV reader that maps rows to a dict according to given or inferred fieldnames,
+    it also accepts the delimiter and quotechar keywords
+
+    :param f: The open file to read from
+    :param fieldnames: The fieldnames for each of the columns, if none is given,
+    it will default to the whatever is in the first row of the CSV file
+    :param restkey: A key name for values that have no key (row is larger than
+    the length of fieldnames), default is None
+    :param restval: A default value for keys that have no values (row is small
+    than the length of fieldnames, default is None
+    """
+
     def __init__(
         self,
         f: io.TextIOWrapper,
@@ -163,6 +203,17 @@ class DictReader:
 
 # Copied from CPython's csv.py
 class DictWriter:
+    """CSV writer that uses a dict to write the rows according fieldnames, it also accepts the
+    delimiter and quotechar keywords
+
+    :param f: The open file to write to
+    :param fieldnames: The fieldnames for each of the comlumns
+    :param restval: A default value for keys that have no values
+    :extrasaction: The action to perform if a key is encountered when parsing the dict that is \
+    not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a \
+    ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
+    """
+
     def __init__(
         self,
         f: io.TextIOWrapper,
@@ -181,6 +232,7 @@ class DictWriter:
         self.writer = writer(f, **kwds)
 
     def writeheader(self):
+        """Writes the header row to the CSV file"""
         header = dict(zip(self.fieldnames, self.fieldnames))
         return self.writerow(header)
 
@@ -195,7 +247,16 @@ class DictWriter:
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
     def writerow(self, rowdict: Dict):
+        """Writes a row to the CSV file
+
+        :param rowdict: The row to write as a dict, with keys of the DictWriter's \
+        fieldnames parameter
+        """
         return self.writer.writerow(self._dict_to_list(rowdict))
 
     def writerows(self, rowdicts: iter):
+        """Writes multiple rows to the CSV files
+
+        :param rowdicts: An iterable item that yields multiple rows to write
+        """
         return self.writer.writerows(map(self._dict_to_list, rowdicts))
