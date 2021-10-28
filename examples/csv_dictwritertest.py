@@ -19,7 +19,7 @@ header = ["name", "fav-board", "fav-wing"]
 my_info = {
     "name": "Blinka",
     "fav-board": "Feather M4 Express",
-    "fav-wing": "Adalogger FeatherWing"
+    "fav-wing": "Adalogger FeatherWing",
 }
 
 with open("/sd/testwrite.csv", mode="w", encoding="utf-8") as writablefile:
