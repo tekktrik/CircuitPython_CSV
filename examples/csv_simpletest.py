@@ -14,6 +14,7 @@ sdcard = sdcardio.SDCard(spi, board.D10)
 vfs = storage.VfsFat(sdcard)
 storage.mount(vfs, "/sd")
 
+# Write the CSV file!
 with open("/sd/testwrite.csv", mode="w", encoding="utf-8") as writablefile:
     csvwriter = csv.writer(writablefile)
     csvwriter.writerow(["I", "love", "CircuitPython", "!"])
