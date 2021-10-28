@@ -65,16 +65,12 @@ class reader:  # pylint: disable=invalid-name
         row_string = self.file_interator.__next__()
 
         while len(row_string) != 0:
-            if row_string.startswith(
-                self.delimiter
-            ):
+            if row_string.startswith(self.delimiter):
                 csv_value_list.append("")
                 row_string = row_string[1:]
                 continue
 
-            next_match = re.match(
-                self._re_exp, row_string
-            )
+            next_match = re.match(self._re_exp, row_string)
             matches = next_match.groups()
             if matches[0] is None:
                 latest_match = matches[1].strip("\r\n").strip("\n")
@@ -84,12 +80,8 @@ class reader:  # pylint: disable=invalid-name
                 csv_value_list.append(latest_match[1:-1])
 
             if len(row_string) != 0:  # If anything is left in the list...
-                row_string = row_string[
-                    len(latest_match) :
-                ]
-                if (
-                    row_string == self.delimiter
-                ):
+                row_string = row_string[len(latest_match) :]
+                if row_string == self.delimiter:
                     csv_value_list.append("")
                     row_string = row_string[1:]
                 elif (
