@@ -62,19 +62,19 @@ class reader:  # pylint: disable=invalid-name
 
     def __next__(self):
         csv_value_list = []
-        pre_regex_string = self.file_interator.__next__()
+        row_string = self.file_interator.__next__()
 
-        while len(pre_regex_string) != 0:  # while length of string is not zero
-            if pre_regex_string.startswith(
+        while len(row_string) != 0:
+            if row_string.startswith(
                 self.delimiter
-            ):  # if string starts with delimiter, add element and remove
+            ):
                 csv_value_list.append("")
-                pre_regex_string = pre_regex_string[1:]
+                row_string = row_string[1:]
                 continue
 
             next_match = re.match(
-                self._re_exp, pre_regex_string
-            )  # get text match, and add to list
+                self._re_exp, row_string
+            )
             matches = next_match.groups()
             if matches[0] is None:
                 latest_match = matches[1].strip("\r\n").strip("\n")
@@ -83,21 +83,21 @@ class reader:  # pylint: disable=invalid-name
                 latest_match = matches[0].strip("\r\n").strip("\n")
                 csv_value_list.append(latest_match[1:-1])
 
-            if len(pre_regex_string) != 0:  # If anything is left in the list...
-                pre_regex_string = pre_regex_string[
+            if len(row_string) != 0:  # If anything is left in the list...
+                row_string = row_string[
                     len(latest_match) :
-                ]  # Remove the element just grabbed
+                ]
                 if (
-                    pre_regex_string == self.delimiter
-                ):  # if all that's left is a trailing delimiter, remove and append element to list
+                    row_string == self.delimiter
+                ):
                     csv_value_list.append("")
-                    pre_regex_string = pre_regex_string[1:]
+                    row_string = row_string[1:]
                 elif (
-                    pre_regex_string == "\r\n"  # pylint: disable=consider-using-in
-                    or pre_regex_string == "n"  # pylint: disable=consider-using-in
-                ):  # if it's just a newline, remove it and leave as empty string
-                    pre_regex_string = ""
-                pre_regex_string = pre_regex_string[1:]  # remove the delimiter
+                    row_string == "\r\n"  # pylint: disable=consider-using-in
+                    or row_string == "n"  # pylint: disable=consider-using-in
+                ):
+                    row_string = ""
+                row_string = row_string[1:]
 
         return csv_value_list
 
@@ -157,11 +157,11 @@ class DictReader:
     it also accepts the delimiter and quotechar keywords
 
     :param f: The open file to read from
-    :param fieldnames: The fieldnames for each of the columns, if none is given,
+    :param fieldnames: The fieldnames for each of the columns, if none is given, \
     it will default to the whatever is in the first row of the CSV file
-    :param restkey: A key name for values that have no key (row is larger than
+    :param restkey: A key name for values that have no key (row is larger than \
     the length of fieldnames), default is None
-    :param restval: A default value for keys that have no values (row is small
+    :param restval: A default value for keys that have no values (row is small \
     than the length of fieldnames, default is None
     """
 
