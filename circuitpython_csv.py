@@ -230,12 +230,13 @@ class DictWriter:
 
     def _dict_to_list(self, rowdict: Dict):
         if self.extrasaction == "raise":
-            wrong_fields = rowdict.keys() - self.fieldnames
-            if wrong_fields:
-                raise ValueError(
-                    "dict contains fields not in fieldnames: "
-                    + ", ".join([repr(x) for x in wrong_fields])
-                )
+            #wrong_fields = rowdict.keys() - self.fieldnames # TODO: Fix removing ele
+            for field in rowdict.keys():
+                if field not in self.fieldnames:
+                    raise ValueError(
+                        "dict contains fields not in fieldnames: "
+                        + ", ".join([repr(x) for x in field])
+                    )
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
     def writerow(self, rowdict: Dict):
