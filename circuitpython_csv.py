@@ -122,8 +122,9 @@ class writer:  # pylint: disable=invalid-name
         :param seq: The list of values to write
         """
 
+        str_seq = [str(entry) for entry in seq]
         doub_quote_seq = [
-            entry.replace(self.quotechar, self.quotechar * 2) for entry in seq
+            entry.replace(self.quotechar, self.quotechar * 2) for entry in str_seq
         ]
         quoted_seq = [self._apply_quotes(entry) for entry in doub_quote_seq]
         parsed_str = (self.delimiter).join(quoted_seq)
