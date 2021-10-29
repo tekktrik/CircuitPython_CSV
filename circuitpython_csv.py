@@ -112,7 +112,7 @@ class writer:  # pylint: disable=invalid-name
         self.quotechar = quoterchar
         self.newlinechar = "\r\n"
 
-    def writerow(self, seq: List):
+    def writerow(self, seq: List[str]):
         """Write a row to the CSV file
 
         :param seq: The list of values to write
