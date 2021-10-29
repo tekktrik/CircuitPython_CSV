@@ -45,7 +45,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "Circuitpython CircuitPython CSV Library"
+project = "CircuitPython CSV Library"
 copyright = "2021 Alec Delaney"
 author = "Alec Delaney"
 
