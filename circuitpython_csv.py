@@ -54,7 +54,7 @@ class reader:  # pylint: disable=invalid-name
         self.delimiter = delimiter
         self.quotechar = quotechar
         self._re_exp = (
-            "(\\" + quotechar + ".+?\\" + quotechar + ")|([^" + delimiter + "]+)"
+            "(\\" + quotechar + ".+?\\" + quotechar + "),|([^" + delimiter + "]+)"
         )
 
     def __iter__(self):
