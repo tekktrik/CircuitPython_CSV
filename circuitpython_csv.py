@@ -74,10 +74,10 @@ class reader:  # pylint: disable=invalid-name
             matches = next_match.groups()
             if matches[0] is None:
                 latest_match = matches[1].strip("\r\n").strip("\n")
-                csv_value_list.append(latest_match)
+                csv_value_list.append(latest_match.replace(self.quotechar*2, self.quotechar))
             else:
                 latest_match = matches[0].strip("\r\n").strip("\n")
-                csv_value_list.append(latest_match[1:-1])
+                csv_value_list.append(latest_match[1:-1].replace(self.quotechar*2, self.quotechar))
 
             if len(row_string) != 0:  # If anything is left in the list...
                 row_string = row_string[len(latest_match) :]
@@ -118,8 +118,9 @@ class writer:  # pylint: disable=invalid-name
         :param seq: The list of values to write
         """
 
-        parsed_seq = [self._apply_quotes(entry) for entry in seq]
-        parsed_str = (self.delimiter).join(parsed_seq)
+        doub_quote_seq = [entry.replace(self.quotechar, self.quotechar*2) for entry in seq]
+        quoted_seq = [self._apply_quotes(entry) for entry in doub_quote_seq]
+        parsed_str = (self.delimiter).join(quoted_seq)
         self.file_iterator.write(parsed_str + self.newlinechar)
 
     def writerows(self, rows: iter):
