@@ -219,7 +219,7 @@ class DictWriter:
         fieldnames: List,
         restval: str = "",
         extrasaction: str = "raise",
-        **kwds
+        **kwargs
     ):
         self.fieldnames = fieldnames  # list of keys for the dict
         self.restval = restval  # for writing short dicts
@@ -228,7 +228,7 @@ class DictWriter:
                 "extrasaction " "(%s)" " must be 'raise' or 'ignore'" % extrasaction
             )
         self.extrasaction = extrasaction
-        self.writer = writer(f, **kwds)
+        self.writer = writer(f, **kwargs)
 
     def writeheader(self):
         """Writes the header row to the CSV file"""
