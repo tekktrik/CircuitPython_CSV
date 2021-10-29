@@ -143,7 +143,7 @@ class writer:  # pylint: disable=invalid-name
         )
 
 
-# Mostly copied from CPython's csv.py:
+# Ported from CPython's csv.py:
 class DictReader:
     """CSV reader that maps rows to a dict according to given or inferred fieldnames,
     it also accepts the delimiter and quotechar keywords
@@ -193,7 +193,7 @@ class DictReader:
         return row_dict
 
 
-# Copied from CPython's csv.py
+# Ported from CPython's csv.py
 class DictWriter:
     """CSV writer that uses a dict to write the rows according fieldnames, it also accepts the
     delimiter and quotechar keywords
