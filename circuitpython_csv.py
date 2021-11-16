@@ -42,8 +42,8 @@ class reader:  # pylint: disable=invalid-name
 
     :param csvfile: The open file to read from
     :param delimiter: The CSV delimiter, default is comma (,)
-    :param quotechar: The CSV quote character for encapsulating special characters \
-    including the delimiter, default is double quotation mark (")
+    :param quotechar: The CSV quote character for encapsulating special characters
+        including the delimiter, default is double quotation mark (")
     """
 
     def __init__(
@@ -103,8 +103,8 @@ class writer:  # pylint: disable=invalid-name
 
     :param csvfile: The open CSVfile to write to
     :param delimiter: The CSV delimiter, default is comma (,)
-    :param quotechar: The CSV quote character for encapsulating special characters \
-    including the delimiter, default is double quotation mark (")
+    :param quotechar: The CSV quote character for encapsulating special characters
+        including the delimiter, default is double quotation mark (")
     """
 
     def __init__(
@@ -157,12 +157,12 @@ class DictReader:
     it also accepts the delimiter and quotechar keywords
 
     :param f: The open file to read from
-    :param fieldnames: The fieldnames for each of the columns, if none is given, \
-    it will default to the whatever is in the first row of the CSV file
-    :param restkey: A key name for values that have no key (row is larger than \
-    the length of fieldnames), default is None
-    :param restval: A default value for keys that have no values (row is small \
-    than the length of fieldnames, default is None
+    :param fieldnames: The fieldnames for each of the columns, if none is given,
+        it will default to the whatever is in the first row of the CSV file
+    :param restkey: A key name for values that have no key (row is larger than
+        the length of fieldnames), default is None
+    :param restval: A default value for keys that have no values (row is small
+        than the length of fieldnames, default is None
     """
 
     def __init__(
@@ -209,9 +209,9 @@ class DictWriter:
     :param f: The open file to write to
     :param fieldnames: The fieldnames for each of the comlumns
     :param restval: A default value for keys that have no values
-    :extrasaction: The action to perform if a key is encountered when parsing the dict that is \
-    not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a \
-    ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
+    :param extrasaction: The action to perform if a key is encountered when parsing the dict that is
+        not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a
+        ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
     """
 
     def __init__(
@@ -252,8 +252,8 @@ class DictWriter:
     def writerow(self, rowdict: Dict):
         """Writes a row to the CSV file
 
-        :param rowdict: The row to write as a dict, with keys of the DictWriter's \
-        fieldnames parameter
+        :param rowdict: The row to write as a dict, with keys of the DictWriter's
+            fieldnames parameter
         """
         return self.writer.writerow(self._dict_to_list(rowdict))
 
