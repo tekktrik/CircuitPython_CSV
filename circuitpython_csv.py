@@ -53,11 +53,9 @@ class reader:  # pylint: disable=invalid-name
         self.file_interator = csvfile
         self.delimiter = delimiter
         self.quotechar = quotechar
-        self._re_exp = (
-            "(\\{0}.+?\\{0}),|([^{1}]+)". format(quotechar, delimiter)
-        )
+        self._re_exp = "(\\{0}.+?\\{0}),|([^{1}]+)".format(quotechar, delimiter)
 
-    def __iter__(self) -> 'reader':
+    def __iter__(self) -> "reader":
         return self
 
     def __next__(self) -> List[str]:
@@ -180,7 +178,7 @@ class DictReader:
         self.reader = reader(f, **kwargs)
         self.line_num = 0
 
-    def __iter__(self) -> 'DictReader':
+    def __iter__(self) -> "DictReader":
         return self
 
     def __next__(self) -> List[str]:
