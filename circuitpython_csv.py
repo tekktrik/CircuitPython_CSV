@@ -233,8 +233,7 @@ class DictWriter:
 
     def writeheader(self) -> None:
         """Writes the header row to the CSV file"""
-        header = dict(zip(self.fieldnames, self.fieldnames))
-        return self.writerow(header)
+        self.writerow(dict(zip(self.fieldnames, self.fieldnames)))
 
     def _dict_to_list(self, rowdict: Dict[str, Any]) -> Sequence[Any]:
         if self.extrasaction == "raise":
