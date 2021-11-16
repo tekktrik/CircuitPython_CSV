@@ -31,7 +31,7 @@ __repo__ = "https://github.com/tekktrik/Circuitpython_CircuitPython_CSV.git"
 import re
 
 try:
-    from typing import List, Optional, Any, Dict
+    from typing import List, Optional, Any, Dict, Iterable, Sequence
     import io
 except ImportError:
     pass
@@ -42,25 +42,23 @@ class reader:  # pylint: disable=invalid-name
 
     :param csvfile: The open file to read from
     :param delimiter: The CSV delimiter, default is comma (,)
-    :param quotechar: The CSV quote character for encapsulating special characters \
-    including the delimiter, default is double quotation mark (")
+    :param quotechar: The CSV quote character for encapsulating special characters
+        including the delimiter, default is double quotation mark (")
     """
 
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quotechar: str = '"'
-    ):
+    ) -> None:
 
         self.file_interator = csvfile
         self.delimiter = delimiter
         self.quotechar = quotechar
-        self._re_exp = (
-            "(\\" + quotechar + ".+?\\" + quotechar + "),|([^" + delimiter + "]+)"
-        )
+        self._re_exp = "(\\{0}.+?\\{0}),|([^{1}]+)".format(quotechar, delimiter)
 
-    def __iter__(self):
+    def __iter__(self) -> "reader":
         return self
 
-    def __next__(self):
+    def __next__(self) -> List[str]:
         csv_value_list = []
         row_string = self.file_interator.__next__()
 
@@ -103,20 +101,20 @@ class writer:  # pylint: disable=invalid-name
 
     :param csvfile: The open CSVfile to write to
     :param delimiter: The CSV delimiter, default is comma (,)
-    :param quotechar: The CSV quote character for encapsulating special characters \
-    including the delimiter, default is double quotation mark (")
+    :param quotechar: The CSV quote character for encapsulating special characters
+        including the delimiter, default is double quotation mark (")
     """
 
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quoterchar: str = '"'
-    ):
+    ) -> None:
 
         self.file_iterator = csvfile
         self.delimiter = delimiter
         self.quotechar = quoterchar
         self.newlinechar = "\r\n"
 
-    def writerow(self, seq: List[str]):
+    def writerow(self, seq: List[str]) -> None:
         """Write a row to the CSV file
 
         :param seq: The list of values to write
@@ -130,7 +128,7 @@ class writer:  # pylint: disable=invalid-name
         parsed_str = (self.delimiter).join(quoted_seq)
         self.file_iterator.write(parsed_str + self.newlinechar)
 
-    def writerows(self, rows: iter):
+    def writerows(self, rows: iter) -> None:
         """Write multiple rows to the CSV file
 
         :param rows: An iterable item that yields multiple rows to write (e.g., list)
@@ -138,7 +136,7 @@ class writer:  # pylint: disable=invalid-name
         for row in rows:
             self.writerow(row)
 
-    def _apply_quotes(self, entry):
+    def _apply_quotes(self, entry: str) -> str:
         """Apply the quote character to entries as necessary
 
         :param entry: The entry to add the quote charcter to, if needed
@@ -157,12 +155,12 @@ class DictReader:
     it also accepts the delimiter and quotechar keywords
 
     :param f: The open file to read from
-    :param fieldnames: The fieldnames for each of the columns, if none is given, \
-    it will default to the whatever is in the first row of the CSV file
-    :param restkey: A key name for values that have no key (row is larger than \
-    the length of fieldnames), default is None
-    :param restval: A default value for keys that have no values (row is small \
-    than the length of fieldnames, default is None
+    :param fieldnames: The fieldnames for each of the columns, if none is given,
+        it will default to the whatever is in the first row of the CSV file
+    :param restkey: A key name for values that have no key (row is larger than
+        the length of fieldnames), default is None
+    :param restval: A default value for keys that have no values (row is small
+        than the length of fieldnames, default is None
     """
 
     def __init__(
@@ -172,7 +170,7 @@ class DictReader:
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
         **kwargs
-    ):
+    ) -> None:
 
         self.fieldnames = fieldnames
         self.restkey = restkey
@@ -180,10 +178,10 @@ class DictReader:
         self.reader = reader(f, **kwargs)
         self.line_num = 0
 
-    def __iter__(self):
+    def __iter__(self) -> "DictReader":
         return self
 
-    def __next__(self):
+    def __next__(self) -> List[str]:
         if self.line_num == 0:
             if self.fieldnames is None:
                 self.fieldnames = next(self.reader)
@@ -209,9 +207,9 @@ class DictWriter:
     :param f: The open file to write to
     :param fieldnames: The fieldnames for each of the comlumns
     :param restval: A default value for keys that have no values
-    :extrasaction: The action to perform if a key is encountered when parsing the dict that is \
-    not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a \
-    ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
+    :param extrasaction: The action to perform if a key is encountered when parsing the dict that is
+        not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a
+        ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
     """
 
     def __init__(
@@ -221,7 +219,7 @@ class DictWriter:
         restval: str = "",
         extrasaction: str = "raise",
         **kwargs
-    ):
+    ) -> None:
         self.fieldnames = fieldnames  # list of keys for the dict
         self.restval = restval  # for writing short dicts
         if extrasaction.lower() not in ("raise", "ignore"):
@@ -231,12 +229,11 @@ class DictWriter:
         self.extrasaction = extrasaction
         self.writer = writer(f, **kwargs)
 
-    def writeheader(self):
+    def writeheader(self) -> None:
         """Writes the header row to the CSV file"""
-        header = dict(zip(self.fieldnames, self.fieldnames))
-        return self.writerow(header)
+        self.writerow(dict(zip(self.fieldnames, self.fieldnames)))
 
-    def _dict_to_list(self, rowdict: Dict):
+    def _dict_to_list(self, rowdict: Dict[str, Any]) -> Sequence[Any]:
         if self.extrasaction == "raise":
             wrong_fields = []
             for field in rowdict.keys():
@@ -249,15 +246,15 @@ class DictWriter:
                 )
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
-    def writerow(self, rowdict: Dict):
+    def writerow(self, rowdict: Dict[str, Any]) -> None:
         """Writes a row to the CSV file
 
-        :param rowdict: The row to write as a dict, with keys of the DictWriter's \
-        fieldnames parameter
+        :param rowdict: The row to write as a dict, with keys of the DictWriter's
+            fieldnames parameter
         """
         return self.writer.writerow(self._dict_to_list(rowdict))
 
-    def writerows(self, rowdicts: iter):
+    def writerows(self, rowdicts: Iterable[Any]) -> None:
         """Writes multiple rows to the CSV files
 
         :param rowdicts: An iterable item that yields multiple rows to write
