@@ -31,8 +31,13 @@ __repo__ = "https://github.com/tekktrik/Circuitpython_CircuitPython_CSV.git"
 import re
 
 try:
-    from typing import List, Optional, Any, Dict, Iterable, Sequence
+    from typing import Protocol, List, Optional, Any, Dict, Iterable, Sequence, Tuple
     import io
+
+    class SupportsStringCasting(Protocol):
+        def __str__(self) -> str:
+            ...
+
 except ImportError:
     pass
 
