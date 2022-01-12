@@ -119,7 +119,7 @@ class writer:  # pylint: disable=invalid-name
         self.quotechar = quoterchar
         self.newlinechar = "\r\n"
 
-    def writerow(self, seq: List[str]) -> None:
+    def writerow(self, seq: Sequence[SupportsStringCasting]) -> None:
         """Write a row to the CSV file
 
         :param seq: The list of values to write
@@ -133,7 +133,7 @@ class writer:  # pylint: disable=invalid-name
         parsed_str = (self.delimiter).join(quoted_seq)
         self.file_iterator.write(parsed_str + self.newlinechar)
 
-    def writerows(self, rows: iter) -> None:
+    def writerows(self, rows: Iterable[Sequence[SupportsStringCasting]]) -> None:
         """Write multiple rows to the CSV file
 
         :param rows: An iterable item that yields multiple rows to write (e.g., list)
@@ -171,7 +171,7 @@ class DictReader:
     def __init__(
         self,
         f: io.TextIOWrapper,
-        fieldnames: Optional[List] = None,
+        fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
         **kwargs
@@ -220,7 +220,7 @@ class DictWriter:
     def __init__(
         self,
         f: io.TextIOWrapper,
-        fieldnames: List,
+        fieldnames: Sequence[str],
         restval: str = "",
         extrasaction: str = "raise",
         **kwargs
@@ -238,7 +238,7 @@ class DictWriter:
         """Writes the header row to the CSV file"""
         self.writerow(dict(zip(self.fieldnames, self.fieldnames)))
 
-    def _dict_to_list(self, rowdict: Dict[str, Any]) -> Sequence[Any]:
+    def _dict_to_tuple(self, rowdict: Dict[str, Any]) -> Tuple[Any]:
         if self.extrasaction == "raise":
             wrong_fields = []
             for field in rowdict.keys():
@@ -251,17 +251,17 @@ class DictWriter:
                 )
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
-    def writerow(self, rowdict: Dict[str, Any]) -> None:
+    def writerow(self, rowdict: Dict[str, SupportsStringCasting]) -> None:
         """Writes a row to the CSV file
 
         :param rowdict: The row to write as a dict, with keys of the DictWriter's
             fieldnames parameter
         """
-        return self.writer.writerow(self._dict_to_list(rowdict))
+        return self.writer.writerow(self._dict_to_tuple(rowdict))
 
-    def writerows(self, rowdicts: Iterable[Any]) -> None:
+    def writerows(self, rowdicts: Iterable[Dict[str, SupportsStringCasting]]) -> None:
         """Writes multiple rows to the CSV files
 
         :param rowdicts: An iterable item that yields multiple rows to write
         """
-        return self.writer.writerows(map(self._dict_to_list, rowdicts))
+        return self.writer.writerows(map(self._dict_to_tuple, rowdicts))
