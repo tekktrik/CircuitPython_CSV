@@ -38,7 +38,7 @@ except ImportError:
 
 
 class reader:  # pylint: disable=invalid-name
-    """Basic CSV reader class
+    """Basic CSV reader class that behaves like CPython's ``csv.reader()``
 
     :param csvfile: The open file to read from
     :param delimiter: The CSV delimiter, default is comma (,)
@@ -97,7 +97,7 @@ class reader:  # pylint: disable=invalid-name
 
 
 class writer:  # pylint: disable=invalid-name
-    """Basic CSV writer class
+    """Basic CSV writer class that behaves like CPython's ``csv.writer()``
 
     :param csvfile: The open CSVfile to write to
     :param delimiter: The CSV delimiter, default is comma (,)
