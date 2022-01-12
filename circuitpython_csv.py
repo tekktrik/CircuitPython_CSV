@@ -32,14 +32,7 @@ import re
 
 try:
     from typing import List, Optional, Any, Dict, Iterable, Sequence, Tuple
-    from abc import ABC, abstractmethod
     import io
-
-    class SupportsStringCasting(ABC):  # pylint: disable=missing-class-docstring
-        @abstractmethod
-        def __str__(self) -> str:  # pylint: disable=invalid-str-returned
-            pass
-
 
 except ImportError:
     pass
@@ -124,12 +117,12 @@ class writer:  # pylint: disable=invalid-name
         self.quotechar = quoterchar
         self.newlinechar = "\r\n"
 
-    def writerow(self, seq: Sequence[SupportsStringCasting]) -> None:
+    def writerow(self, seq: Sequence[Any]) -> None:
         """Write a row to the CSV file
 
         :param seq: The list of values to write, which must all be str or be able to
             be cast to str
-        :type seq: Sequence[SupportsStringCasting]
+        :type seq: Sequence[Any]
         """
 
         str_seq = [str(entry) for entry in seq]
@@ -140,11 +133,11 @@ class writer:  # pylint: disable=invalid-name
         parsed_str = (self.delimiter).join(quoted_seq)
         self.file_iterator.write(parsed_str + self.newlinechar)
 
-    def writerows(self, rows: Iterable[Sequence[SupportsStringCasting]]) -> None:
+    def writerows(self, rows: Iterable[Sequence[Any]]) -> None:
         """Write multiple rows to the CSV file
 
         :param rows: An iterable item that yields multiple rows to write (e.g., list)
-        :type rows: Iterable[Sequence[str]]
+        :type rows: Iterable[Sequence[Any]]
         """
         for row in rows:
             self.writerow(row)
@@ -265,19 +258,20 @@ class DictWriter:
                 )
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
-    def writerow(self, rowdict: Dict[str, SupportsStringCasting]) -> None:
+    def writerow(self, rowdict: Dict[str, Any]) -> None:
         """Writes a row to the CSV file
 
         :param rowdict: The row to write as a dict, with keys of the DictWriter's
-            fieldnames parameter
-        :type rowdict: Dict[str, SupportsStringCasting]
+            fieldnames parameter; values must be str or be able to be cast to str
+        :type rowdict: Dict[str, Any]
         """
         return self.writer.writerow(self._dict_to_tuple(rowdict))
 
-    def writerows(self, rowdicts: Iterable[Dict[str, SupportsStringCasting]]) -> None:
+    def writerows(self, rowdicts: Iterable[Dict[str, Any]]) -> None:
         """Writes multiple rows to the CSV files
 
-        :param rowdicts: An iterable item that yields multiple rows to write
-        :type rowdicts: Iterable[Dict[str, SupportsStringCasting]]
+        :param rowdicts: An iterable item that yields multiple rows to write;
+            values in those rows must be str or be able to be cast to str
+        :type rowdicts: Iterable[Dict[str, Any]]
         """
         return self.writer.writerows(map(self._dict_to_tuple, rowdicts))
