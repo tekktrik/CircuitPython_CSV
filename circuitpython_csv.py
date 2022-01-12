@@ -31,12 +31,14 @@ __repo__ = "https://github.com/tekktrik/Circuitpython_CircuitPython_CSV.git"
 import re
 
 try:
-    from typing import Protocol, List, Optional, Any, Dict, Iterable, Sequence, Tuple
+    from typing import List, Optional, Any, Dict, Iterable, Sequence, Tuple
+    from abc import ABC, abstractmethod
     import io
 
-    class SupportsStringCasting(Protocol):  # pylint: disable=missing-class-docstring
+    class SupportsStringCasting(ABC):  # pylint: disable=missing-class-docstring
+        @abstractmethod
         def __str__(self) -> str:  # pylint: disable=invalid-str-returned
-            ...
+            pass
 
 
 except ImportError:
