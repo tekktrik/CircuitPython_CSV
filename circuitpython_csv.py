@@ -34,9 +34,10 @@ try:
     from typing import Protocol, List, Optional, Any, Dict, Iterable, Sequence, Tuple
     import io
 
-    class SupportsStringCasting(Protocol):
-        def __str__(self) -> str:
+    class SupportsStringCasting(Protocol):  # pylint: disable=missing-class-docstring
+        def __str__(self) -> str:  # pylint: disable=invalid-str-returned
             ...
+
 
 except ImportError:
     pass
@@ -222,9 +223,10 @@ class DictWriter:
     :param fieldnames: The fieldnames for each of the comlumns
     :type fieldnames: Sequence[str]
     :param str restval: A default value for keys that have no values
-    :param str extrasaction: The action to perform if a key is encountered when parsing the dict that is
-        not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a
-        ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
+    :param str extrasaction: The action to perform if a key is encountered when parsing the dict
+        that is not included in the fieldnames parameter, either "raise" or "ignore".  Ignore
+        raises a ValueError, and "ignore" simply ignore that key/value pair.  Default behavior
+        is "raise"
     """
 
     def __init__(
