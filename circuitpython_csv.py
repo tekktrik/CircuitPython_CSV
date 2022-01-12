@@ -46,8 +46,9 @@ class reader:  # pylint: disable=invalid-name
     """Basic CSV reader class that behaves like CPython's ``csv.reader()``
 
     :param csvfile: The open file to read from
-    :param delimiter: The CSV delimiter, default is comma (,)
-    :param quotechar: The CSV quote character for encapsulating special characters
+    :type csvfile: io.TextIOWrapper
+    :param str delimiter: (Optional) The CSV delimiter, default is comma (,)
+    :param str quotechar: (Optional) The CSV quote character for encapsulating special characters
         including the delimiter, default is double quotation mark (")
     """
 
@@ -105,8 +106,9 @@ class writer:  # pylint: disable=invalid-name
     """Basic CSV writer class that behaves like CPython's ``csv.writer()``
 
     :param csvfile: The open CSVfile to write to
-    :param delimiter: The CSV delimiter, default is comma (,)
-    :param quotechar: The CSV quote character for encapsulating special characters
+    :type csvfile: io.TextIOWrapper
+    :param str delimiter: (Optional) The CSV delimiter, default is comma (,)
+    :param str quotechar: (Optional) The CSV quote character for encapsulating special characters
         including the delimiter, default is double quotation mark (")
     """
 
@@ -122,7 +124,9 @@ class writer:  # pylint: disable=invalid-name
     def writerow(self, seq: Sequence[SupportsStringCasting]) -> None:
         """Write a row to the CSV file
 
-        :param seq: The list of values to write
+        :param seq: The list of values to write, which must all be str or be able to
+            be cast to str
+        :type seq: Sequence[SupportsStringCasting]
         """
 
         str_seq = [str(entry) for entry in seq]
@@ -137,6 +141,7 @@ class writer:  # pylint: disable=invalid-name
         """Write multiple rows to the CSV file
 
         :param rows: An iterable item that yields multiple rows to write (e.g., list)
+        :type rows: Iterable[Sequence[str]]
         """
         for row in rows:
             self.writerow(row)
@@ -144,7 +149,7 @@ class writer:  # pylint: disable=invalid-name
     def _apply_quotes(self, entry: str) -> str:
         """Apply the quote character to entries as necessary
 
-        :param entry: The entry to add the quote charcter to, if needed
+        :param str entry: The entry to add the quote charcter to, if needed
         """
 
         return (
@@ -160,12 +165,15 @@ class DictReader:
     it also accepts the delimiter and quotechar keywords
 
     :param f: The open file to read from
-    :param fieldnames: The fieldnames for each of the columns, if none is given,
+    :type f: io.TextIOWrapper
+    :param fieldnames: (Optional) The fieldnames for each of the columns, if none is given,
         it will default to the whatever is in the first row of the CSV file
-    :param restkey: A key name for values that have no key (row is larger than
+    :type fieldnames: Sequence[str]
+    :param str restkey: (Optional) A key name for values that have no key (row is larger than
         the length of fieldnames), default is None
-    :param restval: A default value for keys that have no values (row is small
+    :param restval: (Optional) A default value for keys that have no values (row is small
         than the length of fieldnames, default is None
+    :type restval: Any
     """
 
     def __init__(
@@ -210,9 +218,11 @@ class DictWriter:
     delimiter and quotechar keywords
 
     :param f: The open file to write to
+    :type f: io.TextIOWrapper
     :param fieldnames: The fieldnames for each of the comlumns
-    :param restval: A default value for keys that have no values
-    :param extrasaction: The action to perform if a key is encountered when parsing the dict that is
+    :type fieldnames: Sequence[str]
+    :param str restval: A default value for keys that have no values
+    :param str extrasaction: The action to perform if a key is encountered when parsing the dict that is
         not included in the fieldnames parameter, either "raise" or "ignore".  Ignore raises a
         ValueError, and "ignore" simply ignore that key/value pair.  Default behavior is "raise"
     """
@@ -256,6 +266,7 @@ class DictWriter:
 
         :param rowdict: The row to write as a dict, with keys of the DictWriter's
             fieldnames parameter
+        :type rowdict: Dict[str, SupportsStringCasting]
         """
         return self.writer.writerow(self._dict_to_tuple(rowdict))
 
@@ -263,5 +274,6 @@ class DictWriter:
         """Writes multiple rows to the CSV files
 
         :param rowdicts: An iterable item that yields multiple rows to write
+        :type rowdicts: Iterable[Dict[str, SupportsStringCasting]]
         """
         return self.writer.writerows(map(self._dict_to_tuple, rowdicts))
