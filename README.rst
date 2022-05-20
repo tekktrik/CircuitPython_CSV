@@ -2,7 +2,7 @@ Introduction
 ============
 
 
-.. image:: https://readthedocs.org/projects/circuitpython-circuitpython-csv/badge/?version=latest
+.. image:: https://readthedocs.org/projects/circuitpython-csv/badge/?version=latest
     :target: https://circuitpython-csv.readthedocs.io/
     :alt: Documentation Status
 
