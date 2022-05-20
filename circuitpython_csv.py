@@ -25,7 +25,7 @@ None
 
 """
 
-# imports__version__ = "0.0.0-auto.0"
+__version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/tekktrik/Circuitpython_CircuitPython_CSV.git"
 
 import re
