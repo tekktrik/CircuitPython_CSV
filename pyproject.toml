@@ -14,7 +14,7 @@ name = "circuitpython-csv"
 description = "CircuitPython helper library for working with CSV files"
 readme = "README.rst"
 authors = [
-    {name = Alec Delaney", email = "tekktrik@gmail.com"}
+    {name = "Alec Delaney", email = "tekktrik@gmail.com"}
 ]
 urls = {Homepage = "https://github.com/tekktrik/CircuitPython_CSV"}
 keywords = [
