@@ -43,6 +43,11 @@ jobs:
     - name: Install deps
       run: |
         source actions-ci/install.sh
+    - name: Populate __version__
+      run: |
+        for file in $(find -not -path "./.*" -not -path "./docs*" -name "*.py" ); do
+            sed -i -e "s/0.0.0-auto.0/${{github.event.release.tag_name}}/" $file;
+        done;
     - name: Build assets
       run: circuitpython-build-bundles --filename_prefix ${{ steps.repo-name.outputs.repo-name }} --library_location .
     - name: Upload Release Assets
