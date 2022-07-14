@@ -20,10 +20,16 @@ Introduction
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Code Style: Black
-    
+
+
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: (https://opensource.org/licenses/MIT)
+    :alt: License: MIT
+
+
 .. image:: https://static.pepy.tech/personalized-badge/circuitpython-csv?period=month&units=international_system&left_color=grey&right_color=orange&left_text=downloads/month
- :target: https://pepy.tech/project/circuitpython-csv
- :alt: Downloads Per Month
+    :target: https://pepy.tech/project/circuitpython-csv
+    :alt: Downloads Per Month
 
 CircuitPython helper library for working with CSV files
 
