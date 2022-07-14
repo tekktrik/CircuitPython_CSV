@@ -21,7 +21,7 @@ Introduction
     :target: https://github.com/psf/black
     :alt: Code Style: Black
     
-.. image:: https://static.pepy.tech/personalized-badge/circuitpython-csv?period=month&units=international_system&left_color=black&right_color=orange&left_text=downloads/month
+.. image:: https://static.pepy.tech/personalized-badge/circuitpython-csv?period=month&units=international_system&left_color=grey&right_color=orange&left_text=downloads/month
  :target: https://pepy.tech/project/circuitpython-csv
 
 CircuitPython helper library for working with CSV files
