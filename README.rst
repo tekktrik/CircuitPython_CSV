@@ -23,6 +23,7 @@ Introduction
     
 .. image:: https://static.pepy.tech/personalized-badge/circuitpython-csv?period=month&units=international_system&left_color=grey&right_color=orange&left_text=downloads/month
  :target: https://pepy.tech/project/circuitpython-csv
+ :alt: Downloads Per Month
 
 CircuitPython helper library for working with CSV files
 
