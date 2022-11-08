@@ -178,7 +178,7 @@ class DictReader:
 
     def __init__(
         self,
-        f: io.TextIOWrapper,
+        f: io.TextIOWrapper,  # pylint: disable=invalid-name
         fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
@@ -230,7 +230,7 @@ class DictWriter:
 
     def __init__(
         self,
-        f: io.TextIOWrapper,
+        f: io.TextIOWrapper,  # pylint: disable=invalid-name
         fieldnames: Sequence[str],
         restval: str = "",
         extrasaction: str = "raise",

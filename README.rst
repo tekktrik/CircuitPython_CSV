@@ -65,7 +65,7 @@ following command to install:
 
 .. code-block:: shell
 
-    circup install csv
+    circup install circuitpython-csv
 
 Or the following command to update an existing version:
 
@@ -80,7 +80,7 @@ Installing from PyPI
 
     This library is provided on PyPI so that code developed for microcontrollers with this
     library will also run on computers like the Raspberry Pi.  If you just need a package
-    for working with CSV files on a computer only, consider using the Python standard
+    for working with CSV files on a computer or SBC only, consider using the Python standard
     library's ``csv`` module instead.
 
 On supported GNU/Linux systems like the Raspberry Pi, you can install the driver locally `from
