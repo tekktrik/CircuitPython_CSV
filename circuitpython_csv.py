@@ -2,6 +2,9 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021 Alec Delaney
 #
 # SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: PSF-2.0
+# SPDX-License-Identifier: 0BSD
+
 """
 `circuitpython_csv`
 ================================================================================

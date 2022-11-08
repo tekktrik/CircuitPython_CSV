@@ -140,3 +140,8 @@ Documentation
 
 For information on building library documentation, please check out
 `this guide <https://learn.adafruit.com/creating-and-sharing-a-circuitpython-library/sharing-our-docs-on-readthedocs#sphinx-5-1>`_.
+
+Attribution
+===========
+
+Some code contained here is ported from CPython, dual licensed by the Python Software Foundation under the PSF License verion 2 and the Zero-Clause BSD license.
