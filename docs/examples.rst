@@ -16,10 +16,10 @@ Logging data to .CSV file on CircuitPython Disk
     :caption: examples/csv_disklogger.py
     :linenos:
 
-Dictwriter test
+DictWriter test
 ----------------
 
-Illustrate an example of the Dictwriter class
+Illustrate an example of the ``DictWriter`` class
 
 .. literalinclude:: ../examples/csv_dictwritertest.py
     :caption: examples/csv_dictwritertest.py
