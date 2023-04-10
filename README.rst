@@ -42,7 +42,7 @@ This driver depends on:
 * `Adafruit CircuitPython <https://github.com/adafruit/circuitpython>`_
 * `MicroPython's regular expression library (re) <https://circuitpython.readthedocs.io/en/latest/docs/library/re.html>`_
 
-You can find which Adafruit boards have the re library `here <https://circuitpython.readthedocs.io/en/latest/shared-bindings/support_matrix.html>`_
+You can find which Adafruit boards have the ``re`` library `here <https://circuitpython.readthedocs.io/en/latest/shared-bindings/support_matrix.html>`_.
 
 Please ensure all dependencies are available on the CircuitPython filesystem.
 This is easily achieved by downloading
