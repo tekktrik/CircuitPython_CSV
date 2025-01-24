@@ -17,14 +17,19 @@ Introduction
     :alt: Build Status
 
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-    :alt: Code Style: Black
+.. image:: https://img.shields.io/badge/code%20style-ruff-000000.svg
+    :target: https://github.com/astral-sh/ruff
+    :alt: Code Style: ruff
 
 
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
     :target: https://opensource.org/licenses/MIT
     :alt: License: MIT
+
+
+.. image:: https://img.shields.io/badge/License-PSF_2.0-yellow.svg
+    :target: https://opensource.org/license/python-2-0
+    :alt: License: PSF-2.0
 
 
 .. image:: https://img.shields.io/badge/Maintained%3F-yes-green.svg
