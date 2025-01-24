@@ -3,9 +3,15 @@
 #
 # SPDX-License-Identifier: MIT
 
+"""Example file for working with CSV files one CIrcuitPython boards, using DictWriter.
+
+This example assumes that an SD storage device is connected to the CircuitPython board.
+"""
+
 import board
 import sdcardio
 import storage
+
 import circuitpython_csv as csv
 
 # Initialize SD card
