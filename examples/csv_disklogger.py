@@ -1,14 +1,23 @@
 # SPDX-FileCopyrightText: 2022 @Skicka for Adafruit Industries / Hakcat
-# Logging data to .CSV file on CircuitPython Disk
+#
 # SPDX-License-Identifier: MIT
 
-# If you get a read-only filesystem error, add "storage.remount('/', False)" in boot.py
-# Make sure you add a way to reverse this in boot.py or your CP device won't show up via USB
-# See example below:
-# https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/data-logger
+
+"""Example file for logging data to .CSV file on CircuitPython disk.
+
+Note that this requires the CircuitPython board to be writable, which is not the
+default state for boards.
+
+If you get a read-only filesystem error, add "storage.remount('/', False)" in boot.py
+Make sure you add a way to reverse this in boot.py or your CP device won't show up via USB
+See example below:
+
+https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/data-logger
+"""
 
 import os
 import random
+
 import circuitpython_csv as csv
 
 # Check if .CSV file is already present. If not, we write CSV headers.

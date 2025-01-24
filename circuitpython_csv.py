@@ -6,12 +6,7 @@
 # SPDX-License-Identifier: PSF-2.0
 # SPDX-License-Identifier: 0BSD
 
-"""
-`circuitpython_csv`
-================================================================================
-
-CircuitPython helper library for working with CSV files
-
+"""CircuitPython helper library for working with CSV files.
 
 * Author(s): Alec Delaney
 
@@ -35,15 +30,15 @@ __repo__ = "https://github.com/tekktrik/CircuitPython_CSV.git"
 import re
 
 try:
-    from typing import List, Optional, Any, Dict, Iterable, Sequence, Tuple
     import io
+    from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 except ImportError:
     pass
 
 
 class reader:  # pylint: disable=invalid-name
-    """Basic CSV reader class that behaves like CPython's ``csv.reader()``
+    """Basic CSV reader class that behaves like CPython's ``csv.reader()``.
 
     :param csvfile: The open file to read from
     :type csvfile: io.TextIOWrapper
@@ -55,16 +50,18 @@ class reader:  # pylint: disable=invalid-name
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quotechar: str = '"'
     ) -> None:
-
+        """Initialize the reader."""
         self.file_interator = csvfile
         self.delimiter = delimiter
         self.quotechar = quotechar
-        self._re_exp = "(\\{0}.+?\\{0}),|([^{1}]+)".format(quotechar, delimiter)
+        self._re_exp = f"(\\{quotechar}.+?\\{0}),|([^{delimiter}]+)"
 
     def __iter__(self) -> "reader":
+        """Get the reader as an iterator (passthrough of self)."""
         return self
 
     def __next__(self) -> List[str]:
+        """Get the next value of the iterator (next line)."""
         csv_value_list = []
         row_string = self.file_interator.__next__()
 
@@ -92,10 +89,7 @@ class reader:  # pylint: disable=invalid-name
                 if row_string == self.delimiter:
                     csv_value_list.append("")
                     row_string = row_string[1:]
-                elif (
-                    row_string == "\r\n"  # pylint: disable=consider-using-in
-                    or row_string == "n"  # pylint: disable=consider-using-in
-                ):
+                elif row_string in ("\r\n", "\n"):
                     row_string = ""
                 row_string = row_string[1:]
 
@@ -103,7 +97,7 @@ class reader:  # pylint: disable=invalid-name
 
 
 class writer:  # pylint: disable=invalid-name
-    """Basic CSV writer class that behaves like CPython's ``csv.writer()``
+    """Basic CSV writer class that behaves like CPython's ``csv.writer()``.
 
     :param csvfile: The open CSVfile to write to
     :type csvfile: io.TextIOWrapper
@@ -115,20 +109,19 @@ class writer:  # pylint: disable=invalid-name
     def __init__(
         self, csvfile: io.TextIOWrapper, delimiter: str = ",", quoterchar: str = '"'
     ) -> None:
-
+        """Initialize the writer."""
         self.file_iterator = csvfile
         self.delimiter = delimiter
         self.quotechar = quoterchar
         self.newlinechar = "\r\n"
 
     def writerow(self, seq: Sequence[Any]) -> None:
-        """Write a row to the CSV file
+        """Write a row to the CSV file.
 
         :param seq: The list of values to write, which must all be str or be able to
             be cast to str
         :type seq: Sequence[Any]
         """
-
         str_seq = [str(entry) for entry in seq]
         doub_quote_seq = [
             entry.replace(self.quotechar, self.quotechar * 2) for entry in str_seq
@@ -138,7 +131,7 @@ class writer:  # pylint: disable=invalid-name
         self.file_iterator.write(parsed_str + self.newlinechar)
 
     def writerows(self, rows: Iterable[Sequence[Any]]) -> None:
-        """Write multiple rows to the CSV file
+        """Write multiple rows to the CSV file.
 
         :param rows: An iterable item that yields multiple rows to write (e.g., list)
         :type rows: Iterable[Sequence[Any]]
@@ -147,11 +140,10 @@ class writer:  # pylint: disable=invalid-name
             self.writerow(row)
 
     def _apply_quotes(self, entry: str) -> str:
-        """Apply the quote character to entries as necessary
+        """Apply the quote character to entries as necessary.
 
         :param str entry: The entry to add the quote charcter to, if needed
         """
-
         return (
             (self.quotechar + entry + self.quotechar)
             if self.delimiter in entry
@@ -161,8 +153,9 @@ class writer:  # pylint: disable=invalid-name
 
 # Ported from CPython's csv.py:
 class DictReader:
-    """CSV reader that maps rows to a dict according to given or inferred fieldnames,
-    it also accepts the delimiter and quotechar keywords
+    """CSV reader that maps rows to a dict according to given or inferred fieldnames.
+
+    It also accepts the delimiter and quotechar keywords.
 
     :param f: The open file to read from
     :type f: io.TextIOWrapper
@@ -182,9 +175,9 @@ class DictReader:
         fieldnames: Optional[Sequence[str]] = None,
         restkey: Optional[str] = None,
         restval: Optional[Any] = None,
-        **kwargs
+        **kwargs,
     ) -> None:
-
+        """Initialize the DictReader."""
         self.fieldnames = fieldnames
         self.restkey = restkey
         self.restval = restval
@@ -192,9 +185,11 @@ class DictReader:
         self.line_num = 0
 
     def __iter__(self) -> "DictReader":
+        """Get an iterator of the DictReader (passthrough of self)."""
         return self
 
     def __next__(self) -> List[str]:
+        """Get the next value of the iterator (next line)."""
         if self.line_num == 0:
             if self.fieldnames is None:
                 self.fieldnames = next(self.reader)
@@ -214,8 +209,9 @@ class DictReader:
 
 # Ported from CPython's csv.py
 class DictWriter:
-    """CSV writer that uses a dict to write the rows according fieldnames, it also accepts the
-    delimiter and quotechar keywords
+    """CSV writer that uses a dict to write the rows according fieldnames.
+
+    It also accepts the delimiter and quotechar keywords.
 
     :param f: The open file to write to
     :type f: io.TextIOWrapper
@@ -234,19 +230,20 @@ class DictWriter:
         fieldnames: Sequence[str],
         restval: str = "",
         extrasaction: str = "raise",
-        **kwargs
+        **kwargs,
     ) -> None:
+        """Initialize the DictWriter."""
         self.fieldnames = fieldnames  # list of keys for the dict
         self.restval = restval  # for writing short dicts
         if extrasaction.lower() not in ("raise", "ignore"):
             raise ValueError(
-                "extrasaction " "(%s)" " must be 'raise' or 'ignore'" % extrasaction
+                "extrasaction (%s) must be 'raise' or 'ignore'" % extrasaction
             )
         self.extrasaction = extrasaction
         self.writer = writer(f, **kwargs)
 
     def writeheader(self) -> None:
-        """Writes the header row to the CSV file"""
+        """Write the header row to the CSV file."""
         self.writerow(dict(zip(self.fieldnames, self.fieldnames)))
 
     def _dict_to_tuple(self, rowdict: Dict[str, Any]) -> Tuple[Any]:
@@ -263,7 +260,7 @@ class DictWriter:
         return (rowdict.get(key, self.restval) for key in self.fieldnames)
 
     def writerow(self, rowdict: Dict[str, Any]) -> None:
-        """Writes a row to the CSV file
+        """Write a row to the CSV file.
 
         :param rowdict: The row to write as a dict, with keys of the DictWriter's
             fieldnames parameter; values must be str or be able to be cast to str
@@ -272,7 +269,7 @@ class DictWriter:
         return self.writer.writerow(self._dict_to_tuple(rowdict))
 
     def writerows(self, rowdicts: Iterable[Dict[str, Any]]) -> None:
-        """Writes multiple rows to the CSV files
+        """Write multiple rows to the CSV files.
 
         :param rowdicts: An iterable item that yields multiple rows to write;
             values in those rows must be str or be able to be cast to str
